@@ -1,0 +1,30 @@
+extends layout
+
+block head
+    script(src='js/client.js')
+
+block content
+    .row
+        .twelve.mobile-four.columns
+            h1.js-welcome Welcome!
+    .row.collapse
+        .ten.mobile-three.columns.user-setup(style='display:none')
+            input.mobile-three.js-user-name(type="text",placeholder="Enter your name")
+        .two.mobile-one.columns.user-setup(style='display:none')
+            a.mobile-one.button.expand.postfix.js-set-user Go!
+
+
+        .twelve.mobile-four.columns.team-setup(style='display:none')
+            h4 Choose your team
+        .six.mobile-two.columns.team-setup(style='display:none')
+            a.twelve.button.js-team(data-team="A") A
+        .six.mobile-two.columns.team-setup(style='display:none')
+            a.twelve.button.js-team(data-team="B") B
+
+        .twelve.mobile-four.columns.voting(style='display:none')
+            h2 Your vote is:
+                |&nbsp;
+                span.js-vote
+            h2 On team
+                |&nbsp;
+                span.js-team

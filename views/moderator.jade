@@ -1,0 +1,48 @@
+extends layout
+
+block head
+    script(src='js/pusher.min.js')
+    script(src='js/server.js')
+
+block content
+    .row
+        .twelve.columns.offset-by-eleven
+            a(href="/moderator",style="float:right") Next Vote
+    .row
+        .twelve.columns
+            h2 Bar or Brothel?
+            h4 (Up for Bar, Sideways for Brothel)
+            h5.vote-countdown
+
+    .row.debate-name(style='display:none')
+        .twelve.columns
+            h1 #{debate.name}
+
+    .row.debate-results(style='display:none')
+        p &nbsp;
+        h1 Team A had
+            |&nbsp;
+            span.teamA
+            |&nbsp;
+            |correct
+        h1 Team B had
+            |&nbsp;
+            span.teamB
+            |&nbsp;
+            |correct
+        p &nbsp;
+        h1.vote-decision
+
+
+    .row.teams
+        .six.columns
+            h2 Team A
+            ul.team-A
+        .six.columns
+            h2 Team B
+            ul.team-B
+
+    script
+        var debate = !{JSON.stringify(debate)}
+        var cat = '!{cat}';
+        console.log(debate);
