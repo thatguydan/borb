@@ -1,6 +1,6 @@
 var app = {
     token:'a6e6d496-e099-4434-ab1d-6eb6bcf39a79',
-    startTime:10,
+    startTime:12,
     voteTime:10,
     teamA:{},
     guns: {
