@@ -3,11 +3,21 @@ extends layout
 block head
     script(src='js/pusher.min.js')
     script(src='js/server.js')
+    link(rel="stylesheet",href="css/social_foundicons.css")
 
 block content
     .row
-        .twelve.columns.offset-by-eleven
-            a(href="/moderator",style="float:right") Next Vote
+        .two.columns.offset-by-ten
+            a(href="/moderator") Next Vote
+            p
+    form.custom
+        .row
+            .two.columns.offset-by-ten
+                label(for="auto-vote")
+                    input(type="checkbox",id="auto-vote",style="display:none")
+                    span.custom.checkbox(name="auto-vote")
+                    |&nbsp;
+                    |Automatic
     .row
         .twelve.columns
             h2 Bar or Brothel?
@@ -16,7 +26,7 @@ block content
 
     .row.debate-name(style='display:none')
         .twelve.columns
-            h1 #{debate.name}
+            h1.subheader #{debate.name}
 
     .row.debate-results(style='display:none')
         p &nbsp;
@@ -33,14 +43,20 @@ block content
         p &nbsp;
         h1.vote-decision
 
+    .row.auto-vote-box(style='display:none')
+        p
+        h2.subheader Next vote starting now...
+
 
     .row.teams
+        .twelve.columns
+            h1.subheader Rotate your phones now
         .six.columns
             h2 Team A
-            ul.team-A
+            dl.team-A
         .six.columns
             h2 Team B
-            ul.team-B
+            dl.team-B
 
     script
         var debate = !{JSON.stringify(debate)}

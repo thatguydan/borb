@@ -1,7 +1,7 @@
 var app = {
     token:'a6e6d496-e099-4434-ab1d-6eb6bcf39a79',
     startTime:10,
-    voteTime:8,
+    voteTime:10,
     teamA:{},
     guns: {
         A:'2712BB000635_1_0_1002',
@@ -18,12 +18,21 @@ var app = {
 
         var sec = app.startTime;
         var iv = setInterval(function() {
-            $('.vote-countdown').text(sec--+' seconds until vote begins');
+            sec--;
+            $('.vote-countdown').text(sec+' seconds until vote begins');
             if (sec===0) {
                 clearInterval(iv);
                 app._beginVote();
             }
         },1000);
+
+        $('#auto-vote').on('change',function() {
+            app._setAuto($(this).prop('checked'));
+        });
+
+        if (app._isAuto()) {
+            $('#auto-vote').click()
+        }
     },
     registerVote: function(deviceData) {
 
@@ -37,7 +46,8 @@ var app = {
 
             // Device doesn't exist, pop it in
         } else {
-            $('.team-'+deviceData.G+' li[data-guid="'+deviceData.GUID+'"] span').text(deviceData.DA)
+            $('.team-'+deviceData.G+' dd[data-guid="'+deviceData.GUID+'"] h4')
+                .text('Currently voting for '+((deviceData.DA=="P")?'Bar':'Brothel'))
         }
 
         app['team'+deviceData.G][deviceData.GUID] = deviceData;
@@ -91,8 +101,6 @@ var app = {
                 else if (cat==='Brothel'&&this.teamB[i].DA==='L') _teamB++;
             }
         }
-
-
 
         return {
             teamA: _teamA/Object.keys(this.teamA).length||0,
@@ -148,6 +156,14 @@ var app = {
 
         }
         $('.debate-results').show();
+
+
+        if (this._isAuto()) {
+            $('.auto-vote-box').show();
+            setTimeout(function() {
+                window.location.reload();
+            },4000);
+        }
     },
     _addVoter: function(deviceData) {
         $.get('https://staging.ninja.is/rest/v0/device/'+deviceData.GUID
@@ -155,13 +171,22 @@ var app = {
             ,function(data) {
                 $.extend(app['team'+deviceData.G][deviceData.GUID],data.data);
                 $('.team-'+deviceData.G).append(
-                    '<li data-guid="'+deviceData.GUID+'">'
+                    '<dt>'
+                    +'<h3 class="subheader">'
+                    +'<i class="foundicon-torso"></i> '
                     +data.data.shortName
-                    +' <span>'
-                    +deviceData.DA
-                    +'</span></ul>'
+                    +'</h3></dt>'
+                    +'<dd data-guid="'+deviceData.GUID+'"><h4>Currently voting for '
+                    +((deviceData.DA==="P")?'Bar':'Brothel')
+                    +'</h4></dd>'
                 );
         });
+    },
+    _setAuto: function(auto) {
+        localStorage.setItem('auto',auto);
+    },
+    _isAuto: function(auto) {
+        return (localStorage.getItem('auto')=="true")
     },
     emit: function(evt,data) {
         $(document).trigger(evt,data);
